@@ -2,6 +2,7 @@
 export enum ROUTES {
   ARCHIVE = "Archive",
   CHATS = "Chats",
+  CHAT = "Chat",
   CONTACTS = "Contacts",
   SETTINGS = "Settings",
 }

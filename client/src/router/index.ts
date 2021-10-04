@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import { ROUTES } from "./routes";
 import Chats from "../views/Chats.vue";
+import Chat from "../views/Chat.vue";
 import Contacts from "../views/Contacts.vue";
 import Settings from "../views/Settings.vue";
 import Archive from "../views/Archive.vue";
@@ -23,6 +24,11 @@ const routes: Array<RouteConfig> = [
     path: `/${lower(ROUTES.CHATS)}`,
     name: ROUTES.CHATS,
     component: Chats,
+  },
+  {
+    path: `/${lower(ROUTES.CHAT)}/:id`,
+    name: ROUTES.CHAT,
+    component: Chat,
   },
   {
     path: `/${lower(ROUTES.CONTACTS)}`,
