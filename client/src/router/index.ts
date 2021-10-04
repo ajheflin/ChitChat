@@ -1,23 +1,38 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
+import { ROUTES } from "./routes";
+import Chats from "../views/Chats.vue";
+import Contacts from "../views/Contacts.vue";
+import Settings from "../views/Settings.vue";
+import Archive from "../views/Archive.vue";
+import VueMeta from "vue-meta";
 
 Vue.use(VueRouter);
+Vue.use(VueMeta);
+
+const lower = (route: string) => route.toLowerCase();
 
 const routes: Array<RouteConfig> = [
+  { path: "/", redirect: `/${lower(ROUTES.CHATS)}` },
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+    path: `/${lower(ROUTES.ARCHIVE)}`,
+    name: ROUTES.ARCHIVE,
+    component: Archive,
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: `/${lower(ROUTES.CHATS)}`,
+    name: ROUTES.CHATS,
+    component: Chats,
+  },
+  {
+    path: `/${lower(ROUTES.CONTACTS)}`,
+    name: ROUTES.CONTACTS,
+    component: Contacts,
+  },
+  {
+    path: `/${lower(ROUTES.SETTINGS)}`,
+    name: ROUTES.SETTINGS,
+    component: Settings,
   },
 ];
 
