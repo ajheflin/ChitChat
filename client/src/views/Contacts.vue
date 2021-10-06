@@ -10,7 +10,7 @@ import Component from "vue-class-component";
 import { MetaInfo } from "vue-meta";
 import { ROUTES } from "../router/routes";
 import ContactList from "../components/ContactList.vue";
-@Component({
+@Component<Contacts>({
   name: ROUTES.CONTACTS,
   metaInfo(): MetaInfo {
     return { title: `ChitChat - ${ROUTES.CONTACTS}` };

@@ -7,6 +7,7 @@ import Contacts from "../views/Contacts.vue";
 import Settings from "../views/Settings.vue";
 import Archive from "../views/Archive.vue";
 import VueMeta from "vue-meta";
+import Profile from "../views/Profile.vue";
 
 Vue.use(VueRouter);
 Vue.use(VueMeta);
@@ -29,6 +30,11 @@ const routes: Array<RouteConfig> = [
     path: `/${lower(ROUTES.CHAT)}/:id`,
     name: ROUTES.CHAT,
     component: Chat,
+  },
+  {
+    path: `/${lower(ROUTES.PROFILE)}/:id`,
+    name: ROUTES.PROFILE,
+    component: Profile,
   },
   {
     path: `/${lower(ROUTES.CONTACTS)}`,

@@ -3,7 +3,7 @@
     v-if="contact"
     link
     class="py-4"
-    :to="`/contact/${contact.id}`"
+    :to="`/profile/${contact.id}`"
     :key="contact.id"
   >
     <Avatar :user="contact" />

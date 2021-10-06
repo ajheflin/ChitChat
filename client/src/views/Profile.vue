@@ -1,6 +1,6 @@
 <template>
   <section class="chat text-center mt-5 text-h6">
-    This is chat with id: {{ this.$route.params.id }}
+    This is user profile of user with id: {{ this.$route.params.id }}
   </section>
 </template>
 
@@ -10,11 +10,14 @@ import Component from "vue-class-component";
 import { ROUTES } from "../router/routes";
 import { MetaInfo } from "vue-meta";
 
-@Component<Chat>({
+@Component<Profile>({
   metaInfo(): MetaInfo {
-    return { title: `ChitChat - ${ROUTES.CHAT} with ${this.$route.params.id}` };
+    return {
+      title: `ChitChat - ${ROUTES.PROFILE} of ${this.$route.params.id}`,
+    };
   }, //replace id with chatter username
-  name: ROUTES.CHAT,
+
+  name: ROUTES.PROFILE,
 })
-export default class Chat extends Vue {}
+export default class Profile extends Vue {}
 </script>
