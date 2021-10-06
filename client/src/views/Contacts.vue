@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h3 class="text-center mt-5">This is Contacts</h3>
-  </div>
+  <v-container>
+    <ContactList />
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -9,10 +9,14 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import { MetaInfo } from "vue-meta";
 import { ROUTES } from "../router/routes";
+import ContactList from "../components/ContactList.vue";
 @Component({
   name: ROUTES.CONTACTS,
   metaInfo(): MetaInfo {
     return { title: `ChitChat - ${ROUTES.CONTACTS}` };
+  },
+  components: {
+    ContactList,
   },
 })
 export default class Contacts extends Vue {}

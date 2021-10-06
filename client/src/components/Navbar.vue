@@ -1,16 +1,26 @@
 <template>
   <nav>
-    <v-app-bar app color="primary pr-2" absolute flat>
-      <v-app-bar-nav-icon dark @click="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar app color="primary pr-2 " absolute flat>
+      <v-app-bar-nav-icon
+        class="d-md-none"
+        dark
+        @click="drawer = !drawer"
+      ></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <v-btn dark icon>
-        <v-icon>mdi-bell</v-icon>
+        <v-badge>
+          <v-icon>mdi-bell</v-icon>
+        </v-badge>
       </v-btn>
       <v-btn dark icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer
+      v-model="drawer"
+      :permanent="$vuetify.breakpoint.mdAndUp"
+      app
+    >
       <v-list class="mt-2">
         <v-list-item>
           <v-avatar color="purple" icon class="mb-2"
@@ -19,7 +29,7 @@
         </v-list-item>
         <v-list-item class="mb-2">
           <v-list-item-content>
-            <v-list-item-title class="text-h6"> John Doe </v-list-item-title>
+            <v-list-item-title class="text-h6">John Doe </v-list-item-title>
             <v-list-item-subtitle>johndoe@gmail.com</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>

@@ -1,5 +1,5 @@
 <template>
-  <section class="chats"><ChatList /></section>
+  <v-container class="chats"><ChatList /></v-container>
 </template>
 
 <script lang="ts">

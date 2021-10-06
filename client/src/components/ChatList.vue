@@ -1,6 +1,6 @@
 <template>
   <v-row fluid>
-    <v-col cols="12" sm="6" offset-sm="3">
+    <v-col cols="11" md="6" class="mx-auto">
       <v-list two-line>
         <template v-for="(chat, i) in chats">
           <v-divider v-if="chat.divider" :key="i"></v-divider>
@@ -15,13 +15,10 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import ChatListItem from "./ChatListItem.vue";
-import IMessage from "../interfaces/chat-message.interface";
 import IChat from "../interfaces/chat.interface";
 import IUser from "../interfaces/user.interface";
-
-interface IDivider {
-  divider: boolean;
-}
+import IDivider from "../interfaces/divider.interface";
+import { addDividers } from "../helpers/divider.helper";
 
 @Component({ components: { ChatListItem } })
 export default class ChatList extends Vue {
@@ -31,7 +28,13 @@ export default class ChatList extends Vue {
       id: "o912u59qawaw5awfn",
       users: [
         { id: "123", username: "johndoe", name: "John Doe" },
-        { id: "456", username: "sallyjones", name: "Sally Jones" },
+        {
+          id: "456",
+          username: "sallyjones",
+          name: "Sally Jones",
+          profile_photo:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo4p7dS0kGOK3eRnM1W-mJtgc68uRYVGOtRg&usqp=CAU",
+        },
       ],
       messages: [
         {
@@ -44,7 +47,13 @@ export default class ChatList extends Vue {
       id: "o912u59awets3qawfn",
       users: [
         { id: "123", username: "johndoe", name: "John Doe" },
-        { id: "456", username: "jackjones", name: "Jack Jones" },
+        {
+          id: "456",
+          username: "jackjones",
+          name: "Jack Jones",
+          profile_photo:
+            "https://sunrift.com/wp-content/uploads/2014/12/Blake-profile-photo-square.jpg",
+        },
       ],
       messages: [
         {
@@ -55,15 +64,7 @@ export default class ChatList extends Vue {
     },
   ];
   mounted() {
-    this.chats = this.addDividers();
-  }
-  private addDividers() {
-    return this.chats.flatMap(
-      (val: IChat | IDivider, i: number, arr: (IChat | IDivider)[]) =>
-        arr.length - 1 !== i // check for the last item
-          ? [val, { divider: true }]
-          : val
-    );
+    this.chats = addDividers(this.chats);
   }
 }
 </script>
