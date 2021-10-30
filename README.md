@@ -21,3 +21,5 @@ ChitChat is a Vue.js-based web chat application, founded on the same core belief
 2. `virtualenv env`
 3. `. env/bin/activate`
 4. `pip install -r dependencies.txt`
+5. `cd api`
+6. `python manage.py runserver`
