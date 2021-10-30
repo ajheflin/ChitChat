@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'chitchatapi.apps.ChitchatapiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
