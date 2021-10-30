@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chitchat',
+        'USER': 'chitchat-root',
+        'PASSWORD': ',]bzQ+CY:5}N$nWxmmRbN\>bD(]v&FwLyx!%[<m9QadbnZyr46h}X_[(#(^Kff+vuD/aq]9V^5W{c"n6yv4#rKL)kwkrB,BLhjMpb^9=Xd)26,p*[9P{a&b=(hdV',
+        'HOST': 'chitchat-db-primary.cocreaa35qkf.us-east-2.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 
