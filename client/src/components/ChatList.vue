@@ -38,7 +38,14 @@ export default class ChatList extends Vue {
       ],
       messages: [
         {
-          sender_id: "123",
+          id: "0wja3nga",
+          sender: {
+            id: "456",
+            username: "sallyjones",
+            name: "Sally Jones",
+            profile_photo:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo4p7dS0kGOK3eRnM1W-mJtgc68uRYVGOtRg&usqp=CAU",
+          },
           content: "Hello World!",
         },
       ],
@@ -57,7 +64,14 @@ export default class ChatList extends Vue {
       ],
       messages: [
         {
-          sender_id: "123",
+          id: "aiwnvaewg",
+          sender: {
+            id: "456",
+            username: "jackjones",
+            name: "Jack Jones",
+            profile_photo:
+              "https://sunrift.com/wp-content/uploads/2014/12/Blake-profile-photo-square.jpg",
+          },
           content: "Hello World!",
         },
       ],
