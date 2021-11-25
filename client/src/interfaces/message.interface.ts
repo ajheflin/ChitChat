@@ -1,6 +1,7 @@
 import IUser from "./user.interface";
 
 export default interface IMessage {
-  sender_id: IUser["id"];
+  readonly id: string;
+  readonly sender: IUser;
   content: File | string;
 }

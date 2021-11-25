@@ -1,4 +1,4 @@
-import IMessage from "./chat-message.interface";
+import IMessage from "./message.interface";
 import IUser from "./user.interface";
 
 export default interface IChat {
