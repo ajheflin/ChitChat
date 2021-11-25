@@ -18,11 +18,20 @@ from django.urls import path
 from django.urls.conf import re_path
 from chitchatapi import views
 urlpatterns = [
+    #admin/
     path('admin/', admin.site.urls),
+    #users/
     path("users/", views.ListUsers.as_view()),
+    #messages/chat/{chatid}
     re_path("messages/chat/(?P<Chat>.+)/$", views.ListMessagesForChat.as_view()),
+    #users/{userid}
     re_path("users/(?P<UID>.?)/$", views.GetUserInfo.as_view()),
+    #users/{userid}/chats
     re_path("users/(?P<UID>.+)/chats/$", views.ListChatsForUser.as_view()),
+    #chats/
     path("chats/", views.ListChats.as_view()),
-    path("messages/", views.ListMessages.as_view())
+    #messages/
+    path("messages/", views.ListMessages.as_view()),
+    #users/manage
+    path('users/manage', views.UserManage.as_view())
 ]
