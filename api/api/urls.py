@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls.conf import re_path
 from chitchatapi import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("users/", views.ListUsers.as_view()),
-    path("chats/", views.ListChats.as_view())
+    re_path("messages/chat/(?P<Chat>.+)/$", views.ListMessagesForChat.as_view()),
+    re_path("users/(?P<UID>.?)/$", views.GetUserInfo.as_view()),
+    re_path("users/(?P<UID>.+)/chats/$", views.ListChatsForUser.as_view()),
+    path("chats/", views.ListChats.as_view()),
+    path("messages/", views.ListMessages.as_view())
 ]

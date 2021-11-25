@@ -1,4 +1,4 @@
-from chitchatapi.models import User, Chat
+from chitchatapi.models import Message, User, Chat
 from rest_framework import serializers
 
 
@@ -13,4 +13,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+        fields = ("__all__")
+
+class MessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer().data
+
+    class Meta:
+        model = Message
         fields = ("__all__")
