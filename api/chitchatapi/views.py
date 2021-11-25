@@ -20,6 +20,11 @@ class GetUserInfo(APIView):
         userid = self.kwargs['UID']
         return Response(UserSerializer(User.objects.filter(id=userid), many=True).data)
 
+class ListChatById(APIView):
+    def get(self, request, format=None, chatid=None):
+        chatid = self.kwargs['chatid']
+        return Response(ChatSerializer(Chat.objects.filter(id=chatid), many=True).data)
+
 class ListChats(APIView):
     def get(self, request, format=None):
         return Response(ChatSerializer(Chat.objects.all(), many=True).data)

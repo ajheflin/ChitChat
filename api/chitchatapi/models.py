@@ -9,7 +9,7 @@ class User(models.Model):
     username    = models.CharField(max_length=100)
     password    = models.CharField(max_length=100)
     email       = models.CharField(max_length=100)
-    chats       = models.ManyToManyField(chat, null=True, blank=True)
+    chats       = models.ManyToManyField(chat, blank=True)
     id          = models.AutoField(primary_key=True)
     def __str__(self):
         return self.username
