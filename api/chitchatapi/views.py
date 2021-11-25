@@ -48,15 +48,32 @@ class UserManage(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ChatManage():
+class ChatManage(APIView):
     # creating a new chat
     # deleting a chat
     # archiving a chat
     # creating a new message in a chat
     # deleting a message in a chat
     # Editing chats (could be a feature)
-    def get(self):
-        pass
+    def post(self, request):
+        serializer = ChatSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def put(self, request):
+        serializer = ChatSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    def delete(self, request):
+        serializer = ChatSerializer(data=request.data)
+
+class MessageManage(APIView):
+    def post(self, request):
+        serializer = MessageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class ListNotifications():

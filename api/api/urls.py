@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import re_path
+from api.chitchatapi.views import MessageManage
 from chitchatapi import views
 urlpatterns = [
     #admin/
@@ -33,5 +34,9 @@ urlpatterns = [
     #messages/
     path("messages/", views.ListMessages.as_view()),
     #users/manage
-    path('users/manage', views.UserManage.as_view())
+    path('users/manage', views.UserManage.as_view()),
+    #chats/manage
+    path('chats/manage', views.ChatManage.as_view()),
+    #messages/manage
+    path('messages/manage', views.MessageManage.as_view())
 ]
