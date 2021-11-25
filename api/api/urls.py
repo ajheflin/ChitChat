@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import re_path
-from api.chitchatapi.views import MessageManage
 from chitchatapi import views
 urlpatterns = [
     #admin/
