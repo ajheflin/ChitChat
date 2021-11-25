@@ -30,7 +30,7 @@ urlpatterns = [
     #users/{userid}/chats
     re_path("users/(?P<UID>.+)/chats/$", views.ListChatsForUser.as_view()),
     #chats/{chatid}
-    re_path("users/(?P<chatid>.?)/$", views.ListChatById.as_view()),
+    re_path("chats/(?P<chatid>.?)/$", views.ListChatById.as_view()),
     #chats/
     path("chats/", views.ListChats.as_view()),
     #messages/
