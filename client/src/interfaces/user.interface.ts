@@ -1,6 +1,10 @@
+import IChat from "./chat.interface";
+
 export default interface IUser {
-  id: string;
   name: string;
   username: string;
+  email?: string;
+  chats: IChat[];
+  id: number;
   profile_photo?: string;
 }

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
+import store from "@/store/index";
 import { ROUTES } from "./routes";
 import Chats from "../views/Chats.vue";
 import Chat from "../views/Chat.vue";
@@ -8,7 +9,8 @@ import Settings from "../views/Settings.vue";
 import Archive from "../views/Archive.vue";
 import VueMeta from "vue-meta";
 import Profile from "../views/Profile.vue";
-
+import Login from "../views/Login.vue";
+import Signup from "../views/Signup.vue";
 Vue.use(VueRouter);
 Vue.use(VueMeta);
 
@@ -20,31 +22,49 @@ const routes: Array<RouteConfig> = [
     path: `/${lower(ROUTES.ARCHIVE)}`,
     name: ROUTES.ARCHIVE,
     component: Archive,
+    meta: { requiresAuth: true },
   },
   {
     path: `/${lower(ROUTES.CHATS)}`,
     name: ROUTES.CHATS,
     component: Chats,
+    meta: { requiresAuth: true },
   },
   {
     path: `/${lower(ROUTES.CHAT)}/:id`,
     name: ROUTES.CHAT,
     component: Chat,
+    meta: { requiresAuth: true },
   },
   {
     path: `/${lower(ROUTES.PROFILE)}/:id`,
     name: ROUTES.PROFILE,
     component: Profile,
+    meta: { requiresAuth: true },
   },
   {
     path: `/${lower(ROUTES.CONTACTS)}`,
     name: ROUTES.CONTACTS,
     component: Contacts,
+    meta: { requiresAuth: true },
   },
   {
     path: `/${lower(ROUTES.SETTINGS)}`,
     name: ROUTES.SETTINGS,
     component: Settings,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: `/${lower(ROUTES.LOGIN)}`,
+    name: ROUTES.LOGIN,
+    component: Login,
+    meta: { requiresAuth: false },
+  },
+  {
+    path: `/${lower(ROUTES.SIGNUP)}`,
+    name: ROUTES.SIGNUP,
+    component: Signup,
+    meta: { requiresAuth: false },
   },
 ];
 
@@ -52,6 +72,20 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach(async (to, from, next) => {
+  const isLoggedIn = store.getters["AuthModule/isLoggedIn"];
+  if (to.matched.some((record) => record.meta.isGuestRoute)) {
+    if (isLoggedIn) return next({ path: `/${lower(ROUTES.CHATS)}` });
+    next();
+  } else if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!isLoggedIn) {
+      next({ path: "/login", query: { redirect: to.fullPath } });
+    }
+    next();
+  }
+  next();
 });
 
 export default router;

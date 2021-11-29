@@ -1,16 +1,16 @@
 <template>
   <v-list-item
-    v-if="chat && user"
+    v-if="!!chat && !!user && !!messages && !!sender && !!chatter"
     link
     :to="`/chat/${chat.id}`"
     class="py-4"
     :key="chat.id"
   >
-    <Avatar :user="getChatter(chat.users)" />
+    <Avatar :user="chatter" />
     <v-list-item-content>
-      <v-list-item-title>{{ getChatter(chat.users).name }}</v-list-item-title>
+      <v-list-item-title>{{ chatter.name }}</v-list-item-title>
       <v-list-item-subtitle
-        v-html="getNameAndContent(chat.messages.at(-1), chat)"
+        v-html="getNameAndContent"
         >{{
       }}</v-list-item-subtitle>
     </v-list-item-content>
@@ -24,6 +24,7 @@ import { Prop } from "vue-property-decorator";
 import IUser from "../interfaces/user.interface";
 import IMessage from "../interfaces/message.interface";
 import Avatar from "./Avatar.vue";
+import axios from "axios";
 
 @Component({
   components: { Avatar },
@@ -31,14 +32,30 @@ import Avatar from "./Avatar.vue";
 export default class ChatListItem extends Vue {
   @Prop() readonly chat: IChat | undefined;
   @Prop() readonly user: IUser | undefined;
+  private messages: IMessage[] = [];
+  private sender: IUser | null = null;
+  private chatter: IUser | null = null;
 
-  private getNameAndContent(msg: IMessage, chat: IChat) {
-    const sender = chat.users.find((u) => u.id == msg.sender.id);
-    return `<span class="font-weight-bold">${sender?.name}</span> — ${msg.content}`;
+  get getNameAndContent() {
+    return `<span class="font-weight-bold">${this.sender?.name}</span> — ${
+      this?.messages.at(-1).content
+    }`;
   }
 
-  private getChatter(users: IUser[]) {
-    return users.find((u) => u.id !== this.user?.id);
+  private async created() {
+    const messages: IMessage[] = (
+      await axios.get(`/api/messages/chat/${this.chat.id}`)
+    ).data;
+    this.messages = messages;
+    if (this.messages.length > 0) {
+      const sender = (
+        await axios.get(`/api/users/${this?.messages.at(-1).sender}`)
+      ).data[0];
+      this.sender = sender;
+      const chatterId = this.chat.users.find((id) => id !== this?.user.id);
+      if (this?.sender.id === chatterId) this.chatter = sender;
+      else this.chatter = this.user;
+    }
   }
 }
 </script>

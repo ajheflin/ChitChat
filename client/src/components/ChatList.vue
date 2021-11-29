@@ -1,9 +1,9 @@
 <template>
-  <v-row fluid>
+  <v-row v-if="chats.length > 0" fluid>
     <v-col cols="11" md="6" class="mx-auto">
       <v-list two-line>
         <template v-for="(chat, i) in chats">
-          <v-divider v-if="chat.divider" :key="i"></v-divider>
+          <v-divider v-if="chat.divider" :key="`${i}-divider`"></v-divider>
           <ChatListItem v-else :key="chat.id" :chat="chat" :user="user" />
         </template>
       </v-list>
@@ -19,65 +19,26 @@ import IChat from "../interfaces/chat.interface";
 import IUser from "../interfaces/user.interface";
 import IDivider from "../interfaces/divider.interface";
 import { addDividers } from "../helpers/divider.helper";
+import { mapGetters } from "vuex";
+import axios from "axios";
 
-@Component({ components: { ChatListItem } })
+@Component({
+  components: { ChatListItem },
+  computed: { ...mapGetters(["AuthModule/getUser"]) },
+})
 export default class ChatList extends Vue {
-  private user: IUser = { id: "123", username: "johndoe", name: "John Doe" };
-  private chats: (IChat | IDivider)[] = [
-    {
-      id: "o912u59qawaw5awfn",
-      users: [
-        { id: "123", username: "johndoe", name: "John Doe" },
-        {
-          id: "456",
-          username: "sallyjones",
-          name: "Sally Jones",
-          profile_photo:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo4p7dS0kGOK3eRnM1W-mJtgc68uRYVGOtRg&usqp=CAU",
-        },
-      ],
-      messages: [
-        {
-          id: "0wja3nga",
-          sender: {
-            id: "456",
-            username: "sallyjones",
-            name: "Sally Jones",
-            profile_photo:
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo4p7dS0kGOK3eRnM1W-mJtgc68uRYVGOtRg&usqp=CAU",
-          },
-          content: "Hello World!",
-        },
-      ],
-    },
-    {
-      id: "o912u59awets3qawfn",
-      users: [
-        { id: "123", username: "johndoe", name: "John Doe" },
-        {
-          id: "456",
-          username: "jackjones",
-          name: "Jack Jones",
-          profile_photo:
-            "https://sunrift.com/wp-content/uploads/2014/12/Blake-profile-photo-square.jpg",
-        },
-      ],
-      messages: [
-        {
-          id: "aiwnvaewg",
-          sender: {
-            id: "456",
-            username: "jackjones",
-            name: "Jack Jones",
-            profile_photo:
-              "https://sunrift.com/wp-content/uploads/2014/12/Blake-profile-photo-square.jpg",
-          },
-          content: "Hello World!",
-        },
-      ],
-    },
-  ];
-  mounted() {
+  // private user: IUser = { id: "123", username: "johndoe", name: "John Doe" };
+  private chats: (IChat | IDivider)[] = [];
+  get user(): IUser {
+    return this.$store.getters["AuthModule/getUser"];
+  }
+  async created() {
+    try {
+      const res = await axios.get(`/api/users/${this.user.id}/chats`);
+      this.chats = res.data as IChat[];
+    } catch (err) {
+      console.error(err);
+    }
     this.chats = addDividers(this.chats);
   }
 }

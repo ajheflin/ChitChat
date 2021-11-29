@@ -1,24 +1,30 @@
 <template>
   <v-list-item
     v-if="message && user"
-    class="py-4 w-full md:w-3/4 lg:w-1/2 my-12 lg:my-16"
-    :class="{ 'self-end': senderIsCurUser() }"
+    class="py-4 w-full md:w-3/4 lg:w-1/2"
+    :class="{
+      'ml-auto': senderIsCurUser(),
+    }"
     :key="message.id"
   >
     <Avatar :user="message.sender.avatar" />
-    <v-list-item-content>
+    <v-list-item-content
+      :class="{
+        'ml-auto': senderIsCurUser(),
+      }"
+    >
       <v-list-item-title
         class="mb-3 text-gray-500 text-sm"
         :class="{
           'text-right': senderIsCurUser(),
           'text-left': !senderIsCurUser(),
         }"
-        >{{ message.sender.username }}</v-list-item-title
+        >{{ message.sender }}</v-list-item-title
       >
       <v-list-item-subtitle
         class="pa-4 rounded-lg overflow whitespace-normal"
         :class="{
-          'text-left text-white': senderIsCurUser(),
+          'text-right text-white': senderIsCurUser(),
           'text-left text-black': !senderIsCurUser(),
         }"
         :style="bubbleStyleObj"
@@ -43,7 +49,7 @@ export default class MessageListItem extends Vue {
   @Prop() readonly user: IUser | undefined;
 
   senderIsCurUser() {
-    return this.message?.sender.id === this.user?.id;
+    return this.message?.sender === this.user?.id;
   }
 
   get bubbleStyleObj() {
@@ -52,12 +58,3 @@ export default class MessageListItem extends Vue {
   }
 }
 </script>
-<style scoped>
-.text-right {
-  text-align: right;
-}
-
-.text-left {
-  text-align: left;
-}
-</style>
