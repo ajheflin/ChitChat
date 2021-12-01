@@ -1,6 +1,6 @@
 <template>
   <v-list-item
-    v-if="message && user"
+    v-if="message && user && users"
     class="py-4 w-full md:w-3/4 lg:w-1/2"
     :class="{
       'ml-auto': senderIsCurUser(),
@@ -19,7 +19,7 @@
           'text-right': senderIsCurUser(),
           'text-left': !senderIsCurUser(),
         }"
-        >{{ message.sender.username }}</v-list-item-title
+        >{{ sender.username }}</v-list-item-title
       >
       <v-list-item-subtitle
         class="pa-4 rounded-lg overflow whitespace-normal"
@@ -47,8 +47,13 @@ import Avatar from "./Avatar.vue";
 export default class MessageListItem extends Vue {
   @Prop() readonly message: IMessage | undefined;
   @Prop() readonly user: IUser | undefined;
+  @Prop() readonly users: IUser[] | undefined;
 
-  senderIsCurUser() {
+  private get sender() {
+    return this.users.find((u) => u.id === this.message.sender);
+  }
+
+  private senderIsCurUser() {
     return this.message?.sender === this.user?.id;
   }
 

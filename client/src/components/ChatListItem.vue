@@ -1,18 +1,15 @@
 <template>
   <v-list-item
-    v-if="chat && user && users"
+    v-if="loaded"
     link
     :to="`/chat/${chat.id}`"
     class="py-4"
     :key="chat.id"
   >
-    <Avatar :user="users.find((u) => u.id !== user.id) || user" />
+    <Avatar :image="avatar" />
     <v-list-item-content>
-      <v-list-item-title>{{ getTitle() }}</v-list-item-title>
-      <v-list-item-subtitle
-        v-html="getNameAndContent"
-        >{{
-      }}</v-list-item-subtitle>
+      <v-list-item-title>{{ title }}</v-list-item-title>
+      <v-list-item-subtitle v-html="subtitle">{{}}</v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
 </template>
@@ -32,43 +29,39 @@ import axios from "axios";
 export default class ChatListItem extends Vue {
   @Prop() readonly chat: IChat | undefined;
   @Prop() readonly user: IUser | undefined;
+  @Prop() readonly users: IUser[] | undefined;
   private messages: IMessage[] = [];
-  private sender: IUser | null = null;
-  private chatter: IUser | null = null;
-  private users: IUser | null = null;
+  private loaded = false;
 
-  get getNameAndContent() {
-    return this.messages.length === 0
-      ? `<span class="font-weight-bold">No messages in chat</span>`
-      : `<span class="font-weight-bold">${this.sender?.name}</span> — ${
-          this?.messages.at(-1).content
-        }`;
+  get avatar() {
+    if (this.chat.users.length === 1) return this.user.avatar_url;
+    if (this.chat.users.length === 2)
+      return this.users.find((u) => u.id !== this.user.id).avatar_url;
+    return this.chat.chat_image;
   }
 
-  getTitle() {
-    return this.chatter?.name ? this.chatter.name : this.chat.name;
+  get title() {
+    console.log(this.chat);
+    if (this.chat.users.length === 1) return this.user.name;
+    if (this.chat.users.length === 2)
+      this.users.find((u) => u.id !== this.user.id).name;
+    return this.chat.name;
+  }
+
+  public get subtitle() {
+    if (this.messages.length <= 0)
+      return `<span class="font-weight-bold">No messages in chat</span>`;
+    const lastMsg = this.messages[this.messages.length - 1];
+    const senderOfLastMsg = this.users.find((u) => u.id === lastMsg.sender);
+    return `<span class="font-weight-bold">${senderOfLastMsg.name}</span> — ${lastMsg.content}`;
   }
 
   private async created() {
-    const messages: IMessage[] = (
-      await axios.get(`/api/messages/chat/${this.chat.id}`)
-    ).data;
-    const users: IUser[] = await Promise.all(
-      this.chat.users.map((uId) =>
-        axios.get(`/api/users/${uId}`).then((res) => res.data[0])
-      )
+    const res = await axios.get<IMessage[]>(
+      `/api/messages/chat/${this.chat.id}`
     );
-    this.users = users;
-    this.messages = messages;
-    if (this.messages.length > 0) {
-      const sender = (
-        await axios.get(`/api/users/${this?.messages.at(-1).sender}`)
-      ).data[0];
-      this.sender = sender;
-      const chatterId = this.chat.users.find((id) => id !== this?.user.id);
-      if (this?.sender.id === chatterId) this.chatter = sender;
-      else this.chatter = this.user;
-    }
+    this.messages = res.data;
+    this.loaded = true;
   }
 }
 </script>

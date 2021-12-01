@@ -52,8 +52,17 @@
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-list-item-group> </v-list
-    ></v-navigation-drawer>
+          <v-list-item @click="logout">
+            <v-list-item-icon>
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Logout</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list></v-navigation-drawer
+    >
   </nav>
 </template>
 
@@ -69,16 +78,13 @@ interface IVListItem {
 
 @Component({})
 export default class Navbar extends Vue {
-  private drawer = false;
   private items: IVListItem[] = [
     { text: "Chats", icon: "mdi-android-messages" },
     { text: "Contacts", icon: "mdi-account-box" },
     { text: "Archive", icon: "mdi-archive" },
     { text: "Settings", icon: "mdi-cog" },
   ];
-  get user(): IUser {
-    return this.$store.getters["AuthModule/getUser"];
-  }
+  private drawer = false;
 
   public hasAvatar(): boolean {
     return !!this.user.avatar_url;
@@ -88,6 +94,15 @@ export default class Navbar extends Vue {
     const splitName = this.user.name.split(" ");
     if (splitName.length <= 1) return splitName[0][0];
     return splitName[0][0] + splitName[1][0];
+  }
+
+  public logout() {
+    this.$store.dispatch("AuthModule/logoutUser");
+    this.$router.push("/login");
+  }
+
+  get user(): IUser {
+    return this.$store.getters["AuthModule/getUser"];
   }
 }
 </script>

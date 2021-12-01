@@ -18,16 +18,21 @@ class ListUsers(APIView):
         return Response(users.data)
 
 # Takes a GET request with ID in URL path, returns user info for given ID, see urls.py for more documentation.
+
+
 class GetUserInfo(APIView):
     def get(self, request, format=None, UID=None):
         userid = self.kwargs['UID']
         return Response(UserSerializer(User.objects.filter(id=userid), many=True).data)
 
 # Takes a GET request with username in URL path, returns user info for given username, see urls.py for more documentation.
+
+
 class GetUserInfoByUsername(APIView):
     def get(self, request, format=None, username=None):
         username = self.kwargs['username']
         return Response(UserSerializer(User.objects.filter(username=username), many=True).data)
+
 
 # Authenticates a user via a POST request, returns an object if the user/password combo is valid, or a 401 UNAUTHORIZED if the user/password combo is not valid
 '''
@@ -39,15 +44,18 @@ class GetUserInfoByUsername(APIView):
         'password': {password}
     }
 '''
+
+
 class AuthUser(APIView):
     def post(self, request):
         reqData = dict(request.data)
         username = reqData['username']
         password = reqData['password']
-        user = User.objects.filter(username=username,password=password)
+        user = User.objects.filter(username=username, password=password)
         if len(user) != 1:
             return Response("Incorrect username/password", status.HTTP_401_UNAUTHORIZED)
         return Response(UserSerializer(user.first()).data, status.HTTP_200_OK)
+
 
 # Registers a user via a POST request, returns an object if the user does not exist and the user model passed via the body is valid, or a 418 IM A TEAPOT if the user already exists, or a 500 INTERNAL_SERVER_ERROR if the model is invalid.
 '''
@@ -64,6 +72,8 @@ class AuthUser(APIView):
         'id':           {id}                    //optional, preferred to be left blank upon initial account creation
     }
 '''
+
+
 class Register(APIView):
     def post(self, request):
         reqData = dict(request.data)
@@ -79,22 +89,30 @@ class Register(APIView):
         return Response("Username already exists", status.HTTP_418_IM_A_TEAPOT)
 
 # Takes a GET request with no parameters, returns a list of all chats
+
+
 class ListChats(APIView):
     def get(self, request, format=None):
         return Response(ChatSerializer(Chat.objects.all(), many=True).data)
 
 # Takes a GET request with user ID in URL path, returns a list of all chats for a given user id, see urls.py for more documentation.
+
+
 class ListChatsForUser(APIView):
     def get(self, request, format=None, UID=None):
         userid = self.kwargs['UID']
         return Response(ChatSerializer(Chat.objects.filter(users__in=[userid]), many=True).data)
 
 # Takes a GET request with no parameters, returns a list of all messages
+
+
 class ListMessages(APIView):
     def get(self, request, format=None):
         return Response(MessageSerializer(Message.objects.all(), many=True).data)
 
 # Takes a GET request with chat ID in URL path, returns a list of all messages for a given chat id, see urls.py for more documentation.
+
+
 class ListMessagesForChat(APIView):
     def get(self, request, format=None, Chat=None):
         chatno = self.kwargs['Chat']
@@ -103,6 +121,8 @@ class ListMessagesForChat(APIView):
     #     pass
 
 # kind of unneccessary, leaving for legacy implementations
+
+
 class UserManage(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
@@ -111,6 +131,8 @@ class UserManage(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 # unncessary, leaving for legacy implementations
+
+
 class ChatManage(APIView):
     # creating a new chat
     # deleting a chat
@@ -126,6 +148,7 @@ class ChatManage(APIView):
             for uid in userList:
                 user: UserModel = User.objects.filter(id=uid).first()
                 if user is None:
+                    print("ERROR HERE")
                     return Response("One or more user ids in this chat do not have a corresponding user.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 user.chats.add(dict(serializer.data)['id'])
                 user.save()
@@ -144,12 +167,15 @@ class ChatManage(APIView):
 # TODO SEND BACK DATA FOR POST AS THE SAME AS GET IN ANY OTHER GET ENDPOINTS
 
 # unncessary, leaving for legacy implementations
+
+
 class MessageManage(APIView):
     def post(self, request):
         serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 # Adds a user to a given chat via  PUT request
 # Returns a 200 OK if both the user id and chat id are valid, but the body of the response is simply a message stating that the user is already in the chat.
@@ -164,6 +190,8 @@ class MessageManage(APIView):
         'user_id': {user_id}
     }
 '''
+
+
 class AddUserToChat(APIView):
     def put(self, request):
         reqDict = dict(request.data)
@@ -182,6 +210,7 @@ class AddUserToChat(APIView):
         else:
             return Response("Invalid chat or user ID provided.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 # Removes a user from a given chat via a PUT request
 # Returns a 200 OK if both the user id and chat id are valid, but the body of the response is simply a message stating that the user is not in the chat.
 # Returns a 200 OK if both the user id and chat id are valid, and returns a serialized chat object if the user is in the chat
@@ -195,6 +224,8 @@ class AddUserToChat(APIView):
         'user_id': {user_id}
     }
 '''
+
+
 class RemoveUserFromChat(APIView):
     def put(self, request):
         reqDict = dict(request.data)
