@@ -34,6 +34,7 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
+    'channels',
     'rest_framework',
     'chitchatapi.apps.ChitchatapiConfig',
     'django.contrib.admin',
@@ -74,6 +75,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
+# Channels settings
+ASGI_APPLICATION = "api.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
