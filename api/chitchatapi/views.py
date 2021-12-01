@@ -15,7 +15,6 @@ class ListUsers(APIView):
         users = UserSerializer(users, many=True)
         return Response(users.data)
 
-
 class GetUserInfo(APIView):
     def get(self, request, format=None, UID=None):
         userid = self.kwargs['UID']
@@ -25,6 +24,16 @@ class GetUserInfoByUsername(APIView):
     def get(self, request, format=None, username=None):
         username = self.kwargs['username']
         return Response(UserSerializer(User.objects.filter(username=username), many=True).data)
+
+class AuthUser(APIView):
+    def post(self, request):
+        reqData = dict(request.data)
+        username = reqData['username']
+        password = reqData['password']
+        user = User.objects.filter(username=username,password=password)
+        if len(user) != 1:
+            return Response("Incorrect username/password", status.HTTP_401_UNAUTHORIZED)
+        return Response(UserSerializer(user.first()).data, status.HTTP_200_OK)
       
 class ListChats(APIView):
     def get(self, request, format=None):
