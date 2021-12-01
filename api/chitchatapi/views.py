@@ -119,9 +119,16 @@ class ChatManage(APIView):
     # deleting a message in a chat
     # Editing chats (could be a feature)
     def post(self, request):
-        serializer = ChatSerializer(data=request.data)
+        serializer: ChatSerializer = ChatSerializer(data=request.data)
         if serializer.is_valid():
+            userList = dict(request.data)['users']
             serializer.save()
+            for uid in userList:
+                user: UserModel = User.objects.filter(id=uid).first()
+                if user is None:
+                    return Response("One or more user ids in this chat do not have a corresponding user.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                user.chats.add(dict(serializer.data)['id'])
+                user.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def put(self, request):
@@ -143,7 +150,7 @@ class MessageManage(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-# Adds a user to a given chat. 
+# Adds a user to a given chat via  PUT request
 # Returns a 200 OK if both the user id and chat id are valid, but the body of the response is simply a message stating that the user is already in the chat.
 # Returns a 200 OK if both the user id and chat id are valid, and returns a serialized chat object if the user is not already in the chat
 # Returns a 500 INTERNAL_SERVER_ERROR if the user or chat does not exist.
@@ -174,7 +181,7 @@ class AddUserToChat(APIView):
         else:
             return Response("Invalid chat or user ID provided.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Removes a user from a given chat. 
+# Removes a user from a given chat via a PUT request
 # Returns a 200 OK if both the user id and chat id are valid, but the body of the response is simply a message stating that the user is not in the chat.
 # Returns a 200 OK if both the user id and chat id are valid, and returns a serialized chat object if the user is in the chat
 # Returns a 500 INTERNAL_SERVER_ERROR if the user or chat does not exist.
