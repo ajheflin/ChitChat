@@ -125,11 +125,13 @@ class ChatManage(APIView):
             serializer.save()
             for uid in userList:
                 user: UserModel = User.objects.filter(id=uid).first()
+                print(str(user))
                 if user is None:
                     return Response("One or more user ids in this chat do not have a corresponding user.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 user.chats.add(dict(serializer.data)['id'])
                 user.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response("The data sent in the request body does not conform to model type Chat, or one or more user ids sent in the users list does not have a corresponding user.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request):
         serializer = ChatSerializer(data=request.data)
