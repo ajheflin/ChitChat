@@ -43,3 +43,4 @@ urlpatterns = [
     path('api/messages/manage', csrf_exempt(views.MessageManage.as_view())),
     re_path('api/users/username/(?P<username>\w+)',
             views.GetUserInfoByUsername.as_view())
+]
