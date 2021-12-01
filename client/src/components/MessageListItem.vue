@@ -19,7 +19,7 @@
           'text-right': senderIsCurUser(),
           'text-left': !senderIsCurUser(),
         }"
-        >{{ message.sender }}</v-list-item-title
+        >{{ message.sender.username }}</v-list-item-title
       >
       <v-list-item-subtitle
         class="pa-4 rounded-lg overflow whitespace-normal"

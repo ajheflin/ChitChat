@@ -1,14 +1,14 @@
 <template>
   <v-list-item
-    v-if="!!chat && !!user && !!messages && !!sender && !!chatter"
+    v-if="chat && user && users"
     link
     :to="`/chat/${chat.id}`"
     class="py-4"
     :key="chat.id"
   >
-    <Avatar :user="chatter" />
+    <Avatar :user="users.find((u) => u.id !== user.id) || user" />
     <v-list-item-content>
-      <v-list-item-title>{{ chatter.name }}</v-list-item-title>
+      <v-list-item-title>{{ getTitle() }}</v-list-item-title>
       <v-list-item-subtitle
         v-html="getNameAndContent"
         >{{
@@ -35,17 +35,30 @@ export default class ChatListItem extends Vue {
   private messages: IMessage[] = [];
   private sender: IUser | null = null;
   private chatter: IUser | null = null;
+  private users: IUser | null = null;
 
   get getNameAndContent() {
-    return `<span class="font-weight-bold">${this.sender?.name}</span> — ${
-      this?.messages.at(-1).content
-    }`;
+    return this.messages.length === 0
+      ? `<span class="font-weight-bold">No messages in chat</span>`
+      : `<span class="font-weight-bold">${this.sender?.name}</span> — ${
+          this?.messages.at(-1).content
+        }`;
+  }
+
+  getTitle() {
+    return this.chatter?.name ? this.chatter.name : this.chat.name;
   }
 
   private async created() {
     const messages: IMessage[] = (
       await axios.get(`/api/messages/chat/${this.chat.id}`)
     ).data;
+    const users: IUser[] = await Promise.all(
+      this.chat.users.map((uId) =>
+        axios.get(`/api/users/${uId}`).then((res) => res.data[0])
+      )
+    );
+    this.users = users;
     this.messages = messages;
     if (this.messages.length > 0) {
       const sender = (
