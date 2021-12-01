@@ -15,6 +15,11 @@ ChitChat is a Vue.js-based web chat application, founded on the same core belief
 1. `npm install`
 2. `npm run serve`
 
+or with `yarn`
+
+1. `yarn install`
+2. `yarn serve`
+
 ## To build and run a local development REST Api:
 
 1. `pip install virtualenv` _optional if you already have virutalenv installed_
