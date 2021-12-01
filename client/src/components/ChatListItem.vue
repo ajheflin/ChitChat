@@ -22,7 +22,7 @@ import Component from "vue-class-component";
 import IChat from "../interfaces/chat.interface";
 import { Prop } from "vue-property-decorator";
 import IUser from "../interfaces/user.interface";
-import IMessage from "../interfaces/chat-message.interface";
+import IMessage from "../interfaces/message.interface";
 import Avatar from "./Avatar.vue";
 
 @Component({
@@ -33,7 +33,7 @@ export default class ChatListItem extends Vue {
   @Prop() readonly user: IUser | undefined;
 
   private getNameAndContent(msg: IMessage, chat: IChat) {
-    const sender = chat.users.find((u) => u.id == msg.sender_id);
+    const sender = chat.users.find((u) => u.id == msg.sender.id);
     return `<span class="font-weight-bold">${sender?.name}</span> — ${msg.content}`;
   }
 

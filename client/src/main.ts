@@ -4,7 +4,7 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueMeta from "vue-meta";
-
+import "./index.css";
 Vue.config.productionTip = false;
 
 Vue.use(VueMeta, { keyName: "head" });
