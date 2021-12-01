@@ -125,7 +125,6 @@ class ChatManage(APIView):
             serializer.save()
             for uid in userList:
                 user: UserModel = User.objects.filter(id=uid).first()
-                print(str(user))
                 if user is None:
                     return Response("One or more user ids in this chat do not have a corresponding user.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 user.chats.add(dict(serializer.data)['id'])
