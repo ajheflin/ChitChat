@@ -44,5 +44,7 @@ urlpatterns = [
     re_path('api/users/username/(?P<username>\w+)',
             views.GetUserInfoByUsername.as_view()),
     path('auth/', csrf_exempt(views.AuthUser.as_view())),
-    path('register/', csrf_exempt(views.Register.as_view()))
+    path('register/', csrf_exempt(views.Register.as_view())),
+    path('api/chats/adduser', csrf_exempt(views.AddUserToChat.as_view())),
+    path('api/chats/removeuser', csrf_exempt(views.RemoveUserFromChat.as_view()))
 ]
