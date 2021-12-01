@@ -12,8 +12,9 @@ ChitChat is a Vue.js-based web chat application, founded on the same core belief
 
 ## To build and run a local development server:
 
-1. `npm install`
-2. `npm run serve`
+1. `cd client`
+2. `npm install`
+3. `npm run serve`
 
 or with `yarn`
 

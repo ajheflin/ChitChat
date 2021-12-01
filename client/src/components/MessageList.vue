@@ -1,5 +1,5 @@
 <template>
-  <v-row fluid class="relative">
+  <v-row v-if="loaded" fluid class="relative">
     <v-col>
       <v-list ref="msgList" class="h-80vh overflow-y-scroll" two-line>
         <template v-for="message in messages">
@@ -21,6 +21,14 @@
       </v-form>
     </v-col>
   </v-row>
+  <div v-else class="w-full flex justify-center mt-7">
+    <v-progress-circular
+      :size="50"
+      class="mx-auto"
+      color="primary"
+      indeterminate
+    ></v-progress-circular>
+  </div>
 </template>
 
 <script lang="ts">
@@ -30,12 +38,13 @@ import IMessage from "../interfaces/message.interface";
 import IUser from "../interfaces/user.interface";
 import MessageListItem from "./MessageListItem.vue";
 import axios from "axios";
-import { Watch } from "vue-property-decorator";
 
 @Component({ components: { MessageListItem } })
 export default class MessageList extends Vue {
   public message = "";
   private messages: IMessage[] = [];
+  private loaded = false;
+
   get user(): IUser {
     return this.$store.getters["AuthModule/getUser"];
   }
@@ -47,21 +56,25 @@ export default class MessageList extends Vue {
     });
     const msg: IMessage = res.data;
     this.messages.push(msg);
+
     await this.$nextTick();
     this.scrollToLatestMsg();
   }
 
   scrollToLatestMsg() {
     const msgList = this.$refs.msgList.$el;
-    msgList.scrollTop = msgList.scrollHeight - msgList.clientHeight;
+    msgList.scrollTop = msgList.scrollHeight;
   }
 
-  async created() {
+  async mounted() {
     const messages = (
       await axios.get(`/api/messages/chat/${this.$route.params.id}`)
     ).data;
     this.messages = messages;
+    this.loaded = true;
     document.documentElement.style.overflowY = "hidden";
+    await this.$nextTick();
+    this.scrollToLatestMsg();
   }
   destroyed() {
     document.documentElement.style.overflowY = "auto";

@@ -72,11 +72,13 @@ export default class LoginForm extends Vue {
   public async login() {
     if (!this.$refs.form.validate()) return;
     try {
-      const res = await axios.get(`api/users/username/${this.username}`);
-      if (res.data.length === 0)
-        throw new Error("No users found with the specified username");
-      const user: IUser = res.data[0];
-      this.$store.dispatch("AuthModule/setUser", user);
+      const res = await axios.post(`api/auth/`, {
+        username: this.username,
+        password: this.password,
+      });
+      if (res.status === 401)
+        throw new Error("Invalid username and password combination");
+      this.$store.dispatch("AuthModule/setUser", res.data as IUser);
       this.$router.push(`/${ROUTES.CHATS.toLowerCase()}`);
     } catch (err) {
       console.error(err.message);
