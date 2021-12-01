@@ -21,6 +21,7 @@ class User(models.Model):
 class Chat(models.Model):
     name = models.CharField(max_length=100)
     users = models.ManyToManyField(User)
+    chat_image = models.CharField(max_length=1000)
     id = models.AutoField(primary_key=True)
 
     def __str__(self):

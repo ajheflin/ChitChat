@@ -34,6 +34,20 @@ class AuthUser(APIView):
         if len(user) != 1:
             return Response("Incorrect username/password", status.HTTP_401_UNAUTHORIZED)
         return Response(UserSerializer(user.first()).data, status.HTTP_200_OK)
+
+class Register(APIView):
+    def post(self, request):
+        reqData = dict(request.data)
+        username = reqData['username']
+        user = User.objects.filter(username=username).first()
+        if user is None:
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response("Something went wrong. Please verify the object you're sending is a valid User object.", status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response("Username already exists", status.HTTP_418_IM_A_TEAPOT)
       
 class ListChats(APIView):
     def get(self, request, format=None):
