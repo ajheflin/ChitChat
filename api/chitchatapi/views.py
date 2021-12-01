@@ -15,28 +15,32 @@ class ListUsers(APIView):
         users = UserSerializer(users, many=True)
         return Response(users.data)
 
+
 class GetUserInfo(APIView):
     def get(self, request, format=None, UID=None):
         userid = self.kwargs['UID']
         return Response(UserSerializer(User.objects.filter(id=userid), many=True).data)
 
-class ListChatById(APIView):
-    def get(self, request, format=None, chatid=None):
-        chatid = self.kwargs['chatid']
-        return Response(ChatSerializer(Chat.objects.filter(id=chatid), many=True).data)
-
+class GetUserInfoByUsername(APIView):
+    def get(self, request, format=None, username=None):
+        username = self.kwargs['username']
+        return Response(UserSerializer(User.objects.filter(username=username), many=True).data)
+      
 class ListChats(APIView):
     def get(self, request, format=None):
         return Response(ChatSerializer(Chat.objects.all(), many=True).data)
+
 
 class ListChatsForUser(APIView):
     def get(self, request, format=None, UID=None):
         userid = self.kwargs['UID']
         return Response(ChatSerializer(Chat.objects.filter(users__in=[userid]), many=True).data)
 
+
 class ListMessages(APIView):
     def get(self, request, format=None):
         return Response(MessageSerializer(Message.objects.all(), many=True).data)
+
 
 class ListMessagesForChat(APIView):
     def get(self, request, format=None, Chat=None):
@@ -44,6 +48,7 @@ class ListMessagesForChat(APIView):
         return Response(MessageSerializer(Message.objects.filter(chat_id=chatno), many=True).data)
     # def get(self, request, format=None):
     #     pass
+
 
 class UserManage(APIView):
     def post(self, request):
@@ -65,16 +70,22 @@ class ChatManage(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     def put(self, request):
         serializer = ChatSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+
     def delete(self, request):
         serializer = ChatSerializer(data=request.data)
 
+# TODO SEND BACK DATA FOR POST AS THE SAME AS GET IN ANY OTHER GET ENDPOINTS
+
+
 class MessageManage(APIView):
     def post(self, request):
+        print(request)
         serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -92,4 +103,4 @@ class ListNotifications():
 
     # Create your views here.
     # class UserList(generics.ListAPIView):
-        # queryset = User.objects.all()
+    # queryset = User.objects.all()

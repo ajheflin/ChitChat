@@ -1,7 +1,11 @@
 import IUser from "./user.interface";
+import IChat from "./chat.interface";
 
 export default interface IMessage {
-  readonly id: string;
-  readonly sender: IUser;
-  content: File | string;
+  created: Date;
+  last_modified: Date;
+  sender: IUser["id"];
+  chat: IChat["id"];
+  content: string;
+  id: string;
 }

@@ -6,4 +6,6 @@ export enum ROUTES {
   PROFILE = "Profile",
   CONTACTS = "Contacts",
   SETTINGS = "Settings",
+  LOGIN = "Login",
+  SIGNUP = "Signup",
 }
