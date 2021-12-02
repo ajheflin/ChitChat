@@ -6,9 +6,11 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = ("__all__")
-    def create(self, validated_data):
-        chat = Chat.objects.get_or_create(**validated_data)
-        return chat
+
+    # def create(self, validated_data):
+    #     print(validated_data)
+    #     chat = Chat.objects.get_or_create(**validated_data)
+    #     return chat
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("__all__")
+
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer().data

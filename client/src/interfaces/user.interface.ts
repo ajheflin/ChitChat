@@ -6,5 +6,5 @@ export default interface IUser {
   email?: string;
   chats: IChat[];
   id: number;
-  profile_photo?: string;
+  avatar_url?: string;
 }
