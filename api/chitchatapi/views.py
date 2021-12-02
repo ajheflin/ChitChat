@@ -25,12 +25,7 @@ class GetUserInfo(APIView):
         userid = self.kwargs['UID']
         return Response(UserSerializer(User.objects.filter(id=userid), many=True).data)
 
-
-<< << << < HEAD
-== == == =
 # Takes a GET request with username in URL path, returns user info for given username, see urls.py for more documentation.
-
->>>>>> > origin/feat-settings
 
 
 class GetUserInfoByUsername(APIView):
@@ -39,8 +34,6 @@ class GetUserInfoByUsername(APIView):
         return Response(UserSerializer(User.objects.filter(username=username), many=True).data)
 
 
-<< << << < HEAD
-== == == =
 # Authenticates a user via a POST request, returns an object if the user/password combo is valid, or a 401 UNAUTHORIZED if the user/password combo is not valid
 '''
     headers: {
@@ -96,9 +89,6 @@ class Register(APIView):
         return Response("Username already exists", status.HTTP_418_IM_A_TEAPOT)
 
 # Takes a GET request with no parameters, returns a list of all chats
-
-
->>>>>> > origin/feat-settings
 
 
 class ListChats(APIView):
