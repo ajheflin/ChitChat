@@ -1,5 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from rest_framework.serializers import Serializer
+from .serializers import MessageSerializer, UserSerializer, ChatSerializer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -13,13 +15,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['text']
+        message = text_data_json['content']
+        # serializer = MessageSerializer(data=message)
+        # if serializer.is_valid():
+        #     serializer.save()
+
         await self.channel_layer.group_send(self.chat_id, {
             'type': 'chat.message',
-            'text': message
+            'content': message
         })
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps({
-            'text': event['text']
+            'content': event['content']
         }))
