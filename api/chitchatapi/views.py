@@ -10,14 +10,7 @@ from rest_framework.viewsets import ModelViewSet
 from .models import Chat as ChatModel, User as UserModel
 
 
-<<<<<<< HEAD
-def index(request):
-    return render(request, 'tempChat/index.html')
-
-
-=======
 # Takes a GET request with no parameters, returns a list of all users
->>>>>>> origin/feat-settings
 class ListUsers(APIView):
     def get(self, request, format=None):
         users = User.objects.all()
@@ -32,11 +25,13 @@ class GetUserInfo(APIView):
         userid = self.kwargs['UID']
         return Response(UserSerializer(User.objects.filter(id=userid), many=True).data)
 
-<<<<<<< HEAD
-=======
+
+<< << << < HEAD
+== == == =
 # Takes a GET request with username in URL path, returns user info for given username, see urls.py for more documentation.
 
->>>>>>> origin/feat-settings
+>>>>>> > origin/feat-settings
+
 
 class GetUserInfoByUsername(APIView):
     def get(self, request, format=None, username=None):
@@ -44,8 +39,8 @@ class GetUserInfoByUsername(APIView):
         return Response(UserSerializer(User.objects.filter(username=username), many=True).data)
 
 
-<<<<<<< HEAD
-=======
+<< << << < HEAD
+== == == =
 # Authenticates a user via a POST request, returns an object if the user/password combo is valid, or a 401 UNAUTHORIZED if the user/password combo is not valid
 '''
     headers: {
@@ -103,7 +98,9 @@ class Register(APIView):
 # Takes a GET request with no parameters, returns a list of all chats
 
 
->>>>>>> origin/feat-settings
+>>>>>> > origin/feat-settings
+
+
 class ListChats(APIView):
     def get(self, request, format=None):
         return Response(ChatSerializer(Chat.objects.all(), many=True).data)
