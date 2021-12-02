@@ -13,16 +13,15 @@ from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
-import api.routing
+from django.urls.conf import re_path
+import chitchatapi.routing
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
-        URLRouter(
-            api.routing.websocket_urlpatterns
-        )
+    "websocket": URLRouter(
+        chitchatapi.routing.websocket_urlpatterns
     ),
 })
