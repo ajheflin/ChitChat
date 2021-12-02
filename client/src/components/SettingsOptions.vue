@@ -30,17 +30,30 @@
         v-model="currentPassword"
         label="Current Password"
         hide-details="auto"
+        type="password"
       ></v-text-field>
       <v-text-field
         v-model="newPassword"
         label="New Password"
         hide-details="auto"
+        type="password"
       ></v-text-field>
       <v-text-field
         v-model="confirmNew"
         label="Confirm New Password"
         hide-details="auto"
+        type="password"
       ></v-text-field>
+      <br />
+      <p class="danger" v-if="passwordsInvalid">
+        The new passwords do not match.
+      </p>
+      <p class="danger" v-if="originalPassInvalid">
+        The current password you entered is invalid.
+      </p>
+      <p class="text-success" v-if="success">
+        Your password has been changed successfully.
+      </p>
     </div>
     <v-btn class="mt-5" color="primary" @click="changePass">
       Change Password
@@ -92,6 +105,9 @@ export default class SettingsOptions extends Vue {
   public confirmNew = "";
   public currentPassword = "";
   public dialog = false;
+  public passwordsInvalid = false;
+  public originalPassInvalid = false;
+  public success = false;
 
   get user() {
     return this.$store.getters["AuthModule/getUser"];
@@ -113,16 +129,32 @@ export default class SettingsOptions extends Vue {
 
   public async changePass() {
     if (this.newPassword == this.confirmNew) {
-      await axios.post("/api/users/changePass/", {
-        user_id: this.user.id,
-        newPassword: this.newPassword,
-      });
+      this.passwordsInvalid = false;
+      await axios
+        .post("/api/users/changePassword/", {
+          oldPassword: this.currentPassword,
+          user_id: this.user.id,
+          newPassword: this.newPassword,
+        })
+        .then((res) => {
+          this.currentPassword = "";
+          this.newPassword = "";
+          this.confirmNew = "";
+          this.success = true;
+        })
+        .catch((err) => {
+          this.originalPassInvalid = true;
+        });
+    } else {
+      this.passwordsInvalid = true;
     }
   }
 
   public async deleteAccount() {
     await axios.get(`/api/users/delete/${this.user.id}`);
     this.dialog = false;
+
+    //TODO: CLEAR OUT STORE, Pop up box
   }
 }
 </script>
