@@ -244,6 +244,63 @@ class RemoveUserFromChat(APIView):
         else:
             return Response("Invalid chat or user ID provided.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+'''
+{
+    user_id: number;
+    newUsername: string;
+}
+'''
+class ChangeUsername(APIView):
+    def post(self, request):
+        reqDict = dict(request.data)
+        uid = reqDict['user_id']
+        username = reqDict['newUsername']
+        user: UserModel = User.objects.filter(id=uid).first()
+        currentUser: UserModel = User.objects.filter(username=username).first()
+        if currentUser is not None:
+            return Response(f'User {username} already exists.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if user is None:
+            return Response(f'User {uid} does not exist in users table.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        user.username = username
+        user.save()
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+class ChangeName(APIView):
+    def post(self, request):
+        reqDict = dict(request.data)
+        uid = reqDict['user_id']
+        name = reqDict['newName']
+        user: UserModel = User.objects.filter(id=uid).first()
+        if user is None:
+            return Response(f'User {uid} does not exist in users table.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        user.name = name
+        user.save()
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
+class ChangePassword(APIView):
+    def post(self, request):
+        reqDict = dict(request.data)
+        uid = reqDict['user_id']
+        password = reqDict['newPassword']
+        user: UserModel = User.objects.filter(id=uid).first()
+        if user is None:
+            return Response(f'User {uid} does not exist in users table.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        user.password = password;
+        user.save()
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
+
+class DeleteUser(APIView):
+    def get(self, request, UID):
+        uid = self.kwargs['UID']
+        user: UserModel = User.objects.filter(id=uid).first()
+        if user is None:
+            return Response(f'User {uid} does not exist in users table.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        user.delete()
+        return Response("User successfully deleted.", status=status.HTTP_200_OK)
+
 
 class ListNotifications():
     pass
