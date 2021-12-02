@@ -50,14 +50,14 @@ export default class MessageListItem extends Vue {
   @Prop() readonly users: IUser[] | undefined;
 
   private get sender() {
-    return this.users.find((u) => u.id === this.message.sender);
+    return this?.users?.find((u) => u.id === this?.message?.sender);
   }
 
   private senderIsCurUser() {
     return this.message?.sender === this.user?.id;
   }
 
-  get bubbleStyleObj() {
+  get bubbleStyleObj(): { backgroundColor: string } {
     const isCurUser = this.senderIsCurUser();
     return { backgroundColor: isCurUser ? "#11a5ed" : "#e4eaf1" };
   }

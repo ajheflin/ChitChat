@@ -34,31 +34,31 @@ export default class ChatListItem extends Vue {
   private loaded = false;
 
   get avatar() {
-    if (this.chat.users.length === 1) return this.user.avatar_url;
-    if (this.chat.users.length === 2)
-      return this.users.find((u) => u.id !== this.user.id).avatar_url;
-    return this.chat.chat_image;
+    if (this?.chat?.users?.length === 1) return this?.user?.avatar_url;
+    if (this?.chat?.users?.length === 2)
+      return this?.users?.find((u) => u.id !== this?.user?.id)?.avatar_url;
+    return this?.chat?.chat_image;
   }
 
   get title() {
     console.log(this.chat);
-    if (this.chat.users.length === 1) return this.user.name;
-    if (this.chat.users.length === 2)
-      this.users.find((u) => u.id !== this.user.id).name;
-    return this.chat.name;
+    if (this?.chat?.users?.length === 1) return this?.user?.name;
+    if (this?.chat?.users?.length === 2)
+      this?.users?.find((u) => u.id !== this?.user?.id)?.name;
+    return this?.chat?.name;
   }
 
   public get subtitle() {
-    if (this.messages.length <= 0)
+    if (this.messages!.length <= 0)
       return `<span class="font-weight-bold">No messages in chat</span>`;
-    const lastMsg = this.messages[this.messages.length - 1];
-    const senderOfLastMsg = this.users.find((u) => u.id === lastMsg.sender);
-    return `<span class="font-weight-bold">${senderOfLastMsg.name}</span> — ${lastMsg.content}`;
+    const lastMsg = this?.messages[this.messages.length - 1];
+    const senderOfLastMsg = this?.users?.find((u) => u.id === lastMsg!.sender);
+    return `<span class="font-weight-bold">${senderOfLastMsg?.name}</span> — ${lastMsg?.content}`;
   }
 
   private async created() {
     const res = await axios.get<IMessage[]>(
-      `/api/messages/chat/${this.chat.id}`
+      `/api/messages/chat/${this!.chat!.id}`
     );
     this.messages = res.data;
     this.loaded = true;

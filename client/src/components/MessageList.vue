@@ -1,7 +1,7 @@
 <template>
   <v-row v-if="loaded" fluid class="relative">
     <v-col>
-      <v-list ref="msgList" class="h-80vh overflow-y-scroll" two-line>
+      <v-list ref="msgList" class="h-fit overflow-y-scroll" two-line>
         <template v-for="message in messages">
           <MessageListItem
             :key="message.id"
@@ -13,7 +13,7 @@
       </v-list>
       <v-form>
         <v-text-field
-          class="sticky w-full px-3 lg:px-5 ml-auto"
+          class="sticky w-full h-16 px-5 ml-auto"
           v-model="message"
           append-outer-icon="mdi-send"
           filled
@@ -58,7 +58,7 @@ export default class MessageList extends Vue {
   private users: IUser[] = [];
   private message = "";
   private loaded = false;
-  private timeout = null;
+  private timeout: number | undefined;
 
   public async mounted() {
     const [resMessages, resUsers] = await Promise.all([
@@ -79,20 +79,20 @@ export default class MessageList extends Vue {
     document.documentElement.style.overflowY = "auto";
   }
 
-  public getMessagesRepeater() {
+  private getMessagesRepeater() {
     const messagesPromise = axios.get<IMessage[]>(
       `/api/messages/chat/${this.$route.params.id}`
     );
     const timeoutPromise = new Promise((resolve) => {
-      this.timeout = setTimeout(resolve, 1000);
+      this.timeout = setTimeout(resolve, 1000) as any;
     });
-    Promise.all([messagesPromise, timeoutPromise]).then(([res, _]) => {
+    Promise.all([messagesPromise, timeoutPromise]).then(([res]) => {
       if (this.messages.length !== res.data.length) this.messages = res.data;
       this.getMessagesRepeater();
     });
   }
 
-  public async sendMsg(e) {
+  public async sendMsg(e: Event) {
     e.preventDefault();
     const res = await axios.post("/api/messages/manage", {
       sender: this.user.id,
@@ -109,23 +109,23 @@ export default class MessageList extends Vue {
   }
 
   private scrollToLatestMsg() {
-    const msgList = this.$refs.msgList.$el;
+    const msgList = (this?.$refs?.msgList as Vue)?.$el;
     msgList.scrollTop = msgList.scrollHeight;
   }
 
-  private clearMessage() {
+  public clearMessage() {
     this.message = "";
   }
 
   get user(): IUser {
-    return this.$store.getters["AuthModule/getUser"];
+    return this["$store"].getters["AuthModule/getUser"];
   }
 }
 </script>
 
 <style lang="scss">
-.h-80vh {
-  height: 80vh;
+.h-fit {
+  height: calc(100vh - 150px);
 }
 .v-list-item__content {
   display: flex !important;

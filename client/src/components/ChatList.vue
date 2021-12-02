@@ -103,7 +103,7 @@ export default class ChatList extends Vue {
 
   async createNewChat() {
     const userIds = this.newChat.users.map(
-      (username) => this.users.find((user) => user.username === username).id
+      (username) => this?.users?.find((user) => user.username === username)?.id
     );
     const res = await axios.post(`/api/chats/manage`, {
       name: this.newChat.name,
