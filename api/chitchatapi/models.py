@@ -11,8 +11,10 @@ class User(models.Model):
     password = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     chats = models.ManyToManyField(chat, null=True, blank=True)
-    avatar_url = models.CharField(max_length=1000)
+    avatar_url = models.CharField(
+        max_length=1000, default="https://i.stack.imgur.com/dr5qp.jpg")
     id = models.AutoField(primary_key=True)
+
     def __str__(self):
         return self.username
 
@@ -20,6 +22,8 @@ class User(models.Model):
 class Chat(models.Model):
     name = models.CharField(max_length=100)
     users = models.ManyToManyField(User)
+    chat_image = models.CharField(
+        max_length=1000, default="https://cdn-icons-png.flaticon.com/512/134/134914.png")
     id = models.AutoField(primary_key=True)
 
     def __str__(self):

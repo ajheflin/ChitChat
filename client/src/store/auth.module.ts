@@ -1,3 +1,4 @@
+import IToken from "@/interfaces/token.interface";
 import IUser from "@/interfaces/user.interface";
 import { GetterTree, MutationTree, ActionTree } from "vuex";
 

@@ -41,19 +41,10 @@ import Component from "vue-class-component";
 import axios from "axios";
 import IUser from "../interfaces/user.interface";
 import { ROUTES } from "../router/routes";
-type ValidationRule = [
-  (v: string) => boolean | string,
-  (v: string) => boolean | string
-];
+import { ValidationRule } from "../types/validation-rules.type";
 @Component({})
 export default class LoginForm extends Vue {
   public valid = true;
-  //   public name = "";
-  //   public nameRules: ValidationRule = [
-  //     (name) => !!name || "Name is required",
-  //     (name) =>
-  //       (name && name.length <= 20) || `Name must be less than 20 characters.`,
-  //   ];
 
   public username = "";
   public usernameRules: ValidationRule = [
@@ -69,14 +60,18 @@ export default class LoginForm extends Vue {
       (password && password.length >= 6) ||
       `Password must be at least 6 characters.`,
   ];
+
   public async login() {
-    if (!this.$refs.form.validate()) return;
+    if (!(this?.$refs?.form as Vue & { validate: () => boolean }).validate())
+      return;
     try {
-      const res = await axios.get(`api/users/username/${this.username}`);
-      if (res.data.length === 0)
-        throw new Error("No users found with the specified username");
-      const user: IUser = res.data[0];
-      this.$store.dispatch("AuthModule/setUser", user);
+      const res = await axios.post(`api/auth/`, {
+        username: this.username,
+        password: this.password,
+      });
+      if (res.status === 401)
+        throw new Error("Invalid username and password combination");
+      this.$store.dispatch("AuthModule/setUser", res.data as IUser);
       this.$router.push(`/${ROUTES.CHATS.toLowerCase()}`);
     } catch (err) {
       console.error(err.message);

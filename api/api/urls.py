@@ -42,4 +42,13 @@ urlpatterns = [
     # messages/manage
     path('api/messages/manage', csrf_exempt(views.MessageManage.as_view())),
     re_path('api/users/username/(?P<username>\w+)',
-            views.GetUserInfoByUsername.as_view())
+            views.GetUserInfoByUsername.as_view()),
+    path('api/auth/', csrf_exempt(views.AuthUser.as_view())),
+    path('api/register/', csrf_exempt(views.Register.as_view())),
+    path('api/chats/adduser', csrf_exempt(views.AddUserToChat.as_view())),
+    path('api/chats/removeuser', csrf_exempt(views.RemoveUserFromChat.as_view())),
+    re_path('api/users/delete/(?P<UID>.+)/$', csrf_exempt(views.DeleteUser.as_view())),
+    path('api/users/changeUsername', csrf_exempt(views.ChangeUsername.as_view())),
+    path('api/users/changeName', csrf_exempt(views.ChangeName.as_view())),
+    path('api/users/changePassword', csrf_exempt(views.ChangePassword.as_view()))
+]
