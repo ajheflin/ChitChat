@@ -283,9 +283,10 @@ class ChangePassword(APIView):
         reqDict = dict(request.data)
         uid = reqDict['user_id']
         password = reqDict['newPassword']
-        user: UserModel = User.objects.filter(id=uid).first()
+        old_password = reqDict['oldPassword']
+        user: UserModel = User.objects.filter(id=uid,password=old_password).first()
         if user is None:
-            return Response(f'User {uid} does not exist in users table.', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(f'User {uid} does not exist in users table. Or password was incorrect', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         user.password = password;
         user.save()
