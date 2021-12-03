@@ -4,10 +4,17 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueMeta from "vue-meta";
+import VueSocketIO from "vue-socket.io";
 import "./index.css";
 Vue.config.productionTip = false;
 
 Vue.use(VueMeta, { keyName: "head" });
+// Vue.use(
+//   new VueSocketIO({
+//     debug: true,
+//     connection: "ws://localhost:8000",
+//   })
+// );
 
 new Vue({
   router,
