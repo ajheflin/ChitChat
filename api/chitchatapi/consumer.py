@@ -16,16 +16,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['content']
-        # serializer = MessageSerializer(data=message)
-        # if serializer.is_valid():
-        #     serializer.save()
 
         await self.channel_layer.group_send(self.chat_id, {
             'type': 'chat.message',
-            'content': message
+            'chat': text_data_json['chat'],
+            'content': message,
+            'sender': text_data_json['sender'],
         })
 
     async def chat_message(self, event):
+        message = MessageSerializer(data=event)
+        if message.is_valid():
+            message.save()
+
         await self.send(text_data=json.dumps({
             'content': event['content']
         }))
