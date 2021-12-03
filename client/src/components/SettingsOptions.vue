@@ -85,6 +85,9 @@
             <v-btn color="primary" text @click="deleteAccount">
               Yes, I'm Sure
             </v-btn>
+            <v-btn color="primary" text @click="dialog = false">
+              Nevermind
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -96,6 +99,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import axios from "axios";
+import { ROUTES } from "../router/routes";
 
 @Component({})
 export default class SettingsOptions extends Vue {
@@ -153,8 +157,13 @@ export default class SettingsOptions extends Vue {
   public async deleteAccount() {
     await axios.get(`/api/users/delete/${this.user.id}`);
     this.dialog = false;
+    this.logout();
+    //TODO: CLEAR OUT STORE
+  }
 
-    //TODO: CLEAR OUT STORE, Pop up box
+  public async logout() {
+    await this.$store.dispatch("AuthModule/logoutUser");
+    this.$router.push(`/${ROUTES.LOGIN.toLowerCase()}`);
   }
 }
 </script>
