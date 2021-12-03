@@ -2,15 +2,16 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import store from "@/store/index";
 import { ROUTES } from "./routes";
-import Chats from "../views/Chats.vue";
-import Chat from "../views/Chat.vue";
-import Contacts from "../views/Contacts.vue";
-import Settings from "../views/Settings.vue";
-import Archive from "../views/Archive.vue";
+const Chats = () => import("../views/Chats.vue");
+const Chat = () => import("../views/Chat.vue");
+const Contacts = () => import("../views/Contacts.vue");
+const Settings = () => import("../views/Settings.vue");
+const Archive = () => import("../views/Archive.vue");
+const Profile = () => import("../views/Profile.vue");
+const Login = () => import("../views/Login.vue");
+const Signup = () => import("../views/Signup.vue");
 import VueMeta from "vue-meta";
-import Profile from "../views/Profile.vue";
-import Login from "../views/Login.vue";
-import Signup from "../views/Signup.vue";
+
 Vue.use(VueRouter);
 Vue.use(VueMeta);
 

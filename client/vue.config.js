@@ -9,5 +9,6 @@ module.exports = {
       },
     },
   },
+  parallel: true,
   transpileDependencies: ["vuetify"],
 };

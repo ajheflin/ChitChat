@@ -34,7 +34,6 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
-    'channels',
     'rest_framework',
     'chitchatapi.apps.ChitchatapiConfig',
     'django.contrib.admin',
@@ -75,18 +74,6 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'api.asgi.application'
 
-# Channels settings
-ASGI_APPLICATION = "api.asgi.application"
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-        # Use in production
-        # "BACKEND": "channels_redis.core.RedisChannelLayer",
-        # "CONFIG": {
-        #     "hosts": [("redis", 6379)],
-        # },
-    },
-}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
