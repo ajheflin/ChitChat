@@ -45,13 +45,13 @@
         type="password"
       ></v-text-field>
       <br />
-      <p class="danger" v-if="passwordsInvalid">
+      <p class="text-red-500" v-if="passwordsInvalid">
         The new passwords do not match.
       </p>
-      <p class="danger" v-if="originalPassInvalid">
+      <p class="text-red-500" v-if="originalPassInvalid">
         The current password you entered is invalid.
       </p>
-      <p class="text-success" v-if="success">
+      <p class="text-green-500" v-if="success">
         Your password has been changed successfully.
       </p>
     </div>
