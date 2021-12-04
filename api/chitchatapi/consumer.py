@@ -15,12 +15,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['content']
 
         await self.channel_layer.group_send(self.chat_id, {
             'type': 'chat.message',
-            'chat': text_data_json['chat'],
-            'content': message,
+            'chat': self.chat_id,
+            'content': text_data_json['content'],
             'sender': text_data_json['sender'],
         })
 
@@ -30,5 +29,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message.save()
 
         await self.send(text_data=json.dumps({
+            'chat': event['chat'],
             'content': event['content']
         }))
