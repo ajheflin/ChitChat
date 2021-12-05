@@ -12,6 +12,8 @@ ChitChat is a Vue.js-based web chat application, founded on the same core belief
 
 ## To build and run a local development server:
 
+### Ensure you have Node.js v.14.15.4
+
 1. `cd client`
 2. `npm install`
 3. `npm run serve`
@@ -25,7 +27,7 @@ or with `yarn`
 
 1. `pip install virtualenv` _optional if you already have virutalenv installed_
 2. `virtualenv env`
-3. `. env/bin/activate`
+3. `. env/bin/activate` or `source env/bin/activate`
 4. `pip install -r requirements.txt`
 5. `cd api`
 6. `python manage.py runserver`
