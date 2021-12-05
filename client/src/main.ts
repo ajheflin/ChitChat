@@ -6,8 +6,12 @@ import vuetify from "./plugins/vuetify";
 import VueMeta from "vue-meta";
 import VueSocketIO from "vue-socket.io";
 import "./index.css";
+import VueNativeSock from "vue-native-websocket";
 Vue.config.productionTip = false;
 
+Vue.use(VueNativeSock, "ws://localhost:8000/api/chat", {
+  connectManually: true,
+});
 Vue.use(VueMeta, { keyName: "head" });
 // Vue.use(
 //   new VueSocketIO({

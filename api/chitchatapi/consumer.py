@@ -7,6 +7,7 @@ from .serializers import MessageSerializer, UserSerializer, ChatSerializer
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.chat_id = str(self.scope['url_route']['kwargs']['chat_id'])
+        print(self.channel_name)
         await self.channel_layer.group_add(self.chat_id, self.channel_name)
         await self.accept()
 
@@ -27,8 +28,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = MessageSerializer(data=event)
         if message.is_valid():
             message.save()
-
-        await self.send(text_data=json.dumps({
-            'chat': event['chat'],
-            'content': event['content']
-        }))
+        await self.send(text_data=json.dumps(message.data))

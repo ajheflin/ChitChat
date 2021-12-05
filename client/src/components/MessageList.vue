@@ -58,54 +58,58 @@ export default class MessageList extends Vue {
   private users: IUser[] = [];
   private message = "";
   private loaded = false;
-  private timeout: number | undefined;
+  private WS_URL = `ws://localhost:8000/api/ws/chat/${this.$route.params.id}`;
 
   public async mounted() {
     const [resMessages, resUsers] = await Promise.all([
       axios.get<IMessage[]>(`/api/messages/chat/${this.$route.params.id}`),
       axios.get<IUser[]>(`/api/users`),
     ]);
-    this.users = resUsers.data;
     this.messages = resMessages.data;
+    this.users = resUsers.data;
     this.loaded = true;
-    document.documentElement.style.overflowY = "hidden";
+    this.$connect(this.WS_URL, { format: "json" });
+    this.$options.sockets.onmessage = this.onMessage;
     await this.$nextTick();
+    document.documentElement.style.overflowY = "hidden";
     this.scrollToLatestMsg();
-    this.getMessagesRepeater();
+  }
+
+  public onMessage(msg: MessageEvent) {
+    console.log(msg);
+    this.messages.push(JSON.parse(msg.data));
   }
 
   public destroyed() {
-    clearTimeout(this.timeout);
+    this.$disconnect();
+    delete this.$options.sockets.onmessage;
     document.documentElement.style.overflowY = "auto";
-  }
-
-  private getMessagesRepeater() {
-    const messagesPromise = axios.get<IMessage[]>(
-      `/api/messages/chat/${this.$route.params.id}`
-    );
-    const timeoutPromise = new Promise((resolve) => {
-      this.timeout = setTimeout(resolve, 1000) as any;
-    });
-    Promise.all([messagesPromise, timeoutPromise]).then(([res]) => {
-      if (this.messages.length !== res.data.length) this.messages = res.data;
-      this.getMessagesRepeater();
-    });
   }
 
   public async sendMsg(e: Event) {
     e.preventDefault();
-    const res = await axios.post("/api/messages/manage", {
-      sender: this.user.id,
-      chat: this.$route.params.id,
-      content: this.message,
-    });
-    const msg: IMessage = res.data;
-    this.messages.push(msg);
+    this.$socket.send(
+      JSON.stringify({
+        sender: this.user.id,
+        content: this.message,
+        chat: this.$route.params.id,
+      })
+    );
+    this.message = "";
     await this.$nextTick();
     this.scrollToLatestMsg();
-    this.message = "";
-    clearTimeout(this.timeout);
-    this.getMessagesRepeater();
+
+    // const res = await axios.post("/api/messages/manage", {
+    //   sender: this.user.id,
+    //   chat: this.$route.params.id,
+    //   content: this.message,
+    // });
+    // const msg: IMessage = res.data;
+    // this.messages.push(msg);
+
+    // this.message = "";
+    // clearTimeout(this.timeout);
+    // this.getMessagesRepeater();
   }
 
   private scrollToLatestMsg() {
