@@ -1,5 +1,7 @@
 # ChitChat
 
+[YouTube Demonstration Video Link](https://www.youtube.com/watch?v=StDwUkGYqa4)
+
 An application made by Miguel Quezada, Daniel Williams, Adam (AJ) Heflin, and Winston Bass.
 
 ChitChat is a Vue.js-based web chat application, founded on the same core beliefs that Facebook Messenger prioritizes. These priorities are accessibility, sleek design, and efficiency. We achieve this through our use of Google's Material Design standards.
