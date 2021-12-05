@@ -36,7 +36,7 @@ class GetUserInfoByUsername(APIView):
 class GetChatInfo(APIView):
     def get(self, request, format=None, CID=None):
         chatid = self.kwargs['CID']
-        return Response(ChatSerializer(Chat.objects.filter(id=chatid), many=True).data)
+        return Response(ChatSerializer(Chat.objects.filter(id=chatid).first()).data)
 
 # Authenticates a user via a POST request, returns an object if the user/password combo is valid, or a 401 UNAUTHORIZED if the user/password combo is not valid
 '''
