@@ -28,11 +28,12 @@ urlpatterns = [
     re_path("api/messages/chat/(?P<Chat>.+)/$",
             views.ListMessagesForChat.as_view()),
     # users/{userid}
-    re_path("api/users/(?P<UID>.?)/$", views.GetUserInfo.as_view()),
+    re_path("api/users/(?P<UID>[0-9]+)/$", views.GetUserInfo.as_view()),
     # users/{userid}/chats
-    re_path("api/users/(?P<UID>.+)/chats/$", views.ListChatsForUser.as_view()),
+    re_path("api/users/(?P<UID>[0-9]+)/chats/$", views.ListChatsForUser.as_view()),
     # chats/
     path("api/chats/", views.ListChats.as_view()),
+    re_path("api/chats/(?P<CID>[0-9]+)/$", views.GetChatInfo.as_view()),
     # messages/
     path("api/messages/", views.ListMessages.as_view()),
     # users/manage
