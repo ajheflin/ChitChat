@@ -1,21 +1,5 @@
 <template>
   <nav v-if="user">
-    <v-app-bar app color="primary pr-2 " absolute flat>
-      <v-app-bar-nav-icon
-        class="d-md-none"
-        dark
-        @click="drawer = !drawer"
-      ></v-app-bar-nav-icon>
-      <v-spacer></v-spacer>
-      <v-btn dark icon>
-        <v-badge>
-          <v-icon>mdi-bell</v-icon>
-        </v-badge>
-      </v-btn>
-      <v-btn dark icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
-    </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
       :permanent="$vuetify.breakpoint.mdAndUp"
@@ -80,8 +64,6 @@ interface IVListItem {
 export default class Navbar extends Vue {
   private items: IVListItem[] = [
     { text: "Chats", icon: "mdi-android-messages" },
-    { text: "Contacts", icon: "mdi-account-box" },
-    { text: "Archive", icon: "mdi-archive" },
     { text: "Settings", icon: "mdi-cog" },
   ];
   private drawer = false;

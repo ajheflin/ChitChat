@@ -2,9 +2,9 @@
   <v-row v-if="loaded" fluid class="relative">
     <v-col>
       <v-list ref="msgList" class="h-fit overflow-y-scroll" two-line>
-        <template v-for="message in messages">
+        <template v-for="(message, i) in messages">
           <MessageListItem
-            :key="message.id"
+            :key="i"
             :user="user"
             :users="users"
             :message="message"
@@ -58,58 +58,56 @@ export default class MessageList extends Vue {
   private users: IUser[] = [];
   private message = "";
   private loaded = false;
-  private WS_URL = `ws://localhost:8000/api/ws/chat/${this.$route.params.id}`;
+  private WS_URL = `ws://3.15.140.219:8000/api/ws/chat/${
+    (this as any).$route.params.id
+  }`;
 
   public async mounted() {
     const [resMessages, resUsers] = await Promise.all([
-      axios.get<IMessage[]>(`/api/messages/chat/${this.$route.params.id}`),
+      axios.get<IMessage[]>(
+        `/api/messages/chat/${(this as any).$route.params.id}`
+      ),
       axios.get<IUser[]>(`/api/users`),
     ]);
     this.messages = resMessages.data;
     this.users = resUsers.data;
     this.loaded = true;
-    this.$connect(this.WS_URL, { format: "json" });
-    this.$options.sockets.onmessage = this.onMessage;
+    (this as any).$connect(this.WS_URL, {
+      format: "json",
+    });
+    (this.$options as any).sockets.onmessage = this.onMessage;
     await this.$nextTick();
     document.documentElement.style.overflowY = "hidden";
     this.scrollToLatestMsg();
   }
 
   public onMessage(msg: MessageEvent) {
-    console.log(msg);
-    this.messages.push(JSON.parse(msg.data));
+    const data = JSON.parse(msg.data) as IMessage;
+    if (data.sender !== this.user.id) return this.messages.push(data);
   }
 
   public destroyed() {
-    this.$disconnect();
-    delete this.$options.sockets.onmessage;
+    (this as any).$disconnect();
+    delete (this.$options as any).sockets.onmessage;
     document.documentElement.style.overflowY = "auto";
   }
 
   public async sendMsg(e: Event) {
     e.preventDefault();
-    this.$socket.send(
-      JSON.stringify({
-        sender: this.user.id,
-        content: this.message,
-        chat: this.$route.params.id,
-      })
-    );
+    const data = {
+      sender: this.user.id,
+      content: this.message,
+      chat: (this as any).$route.params.id,
+    };
+    this.messages.push({
+      ...data,
+      last_modified: new Date(),
+      created: new Date(),
+    });
+    (this as any).$socket.send(JSON.stringify(data));
     this.message = "";
     await this.$nextTick();
     this.scrollToLatestMsg();
-
-    // const res = await axios.post("/api/messages/manage", {
-    //   sender: this.user.id,
-    //   chat: this.$route.params.id,
-    //   content: this.message,
-    // });
-    // const msg: IMessage = res.data;
-    // this.messages.push(msg);
-
-    // this.message = "";
-    // clearTimeout(this.timeout);
-    // this.getMessagesRepeater();
   }
 
   private scrollToLatestMsg() {

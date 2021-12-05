@@ -18,15 +18,7 @@
     </v-row>
     <div
       v-else-if="loaded && chats.length <= 0"
-      class="
-        w-full
-        flex
-        justify-center
-        mt-7
-        text-lg text-center
-        md:text-xl
-        text-gray-500
-      "
+      class="w-full flex justify-center mt-7 text-lg text-center md:text-xl text-gray-500"
     >
       You have no chats, press the plus button on the bottom right to get
       chatting!
@@ -111,7 +103,7 @@ export default class ChatList extends Vue {
       chat_image: "https://cdn-icons-png.flaticon.com/512/134/134914.png",
     });
     const data = res.data;
-    this.chats.push(data);
+    this.chats.unshift(data);
     this.dialog = false;
     this.newChat = { name: "", users: [] };
   }
@@ -122,6 +114,7 @@ export default class ChatList extends Vue {
         axios.get(`/api/users/${this.user.id}/chats`),
         axios.get(`/api/users`),
       ]);
+      chatsRes.data = chatsRes.data.sort((a, b) => b.id - a.id);
       this.users = usersRes.data as IUser[];
       this.chats = addDividers(chatsRes.data as IChat[]);
       this.loaded = true;
