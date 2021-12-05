@@ -33,6 +33,10 @@ class GetUserInfoByUsername(APIView):
         username = self.kwargs['username']
         return Response(UserSerializer(User.objects.filter(username=username), many=True).data)
 
+class GetChatInfo(APIView):
+    def get(self, request, format=None, CID=None):
+        chatid = self.kwargs['CID']
+        return Response(ChatSerializer(Chat.objects.filter(id=chatid).first()).data)
 
 # Authenticates a user via a POST request, returns an object if the user/password combo is valid, or a 401 UNAUTHORIZED if the user/password combo is not valid
 '''
@@ -244,12 +248,15 @@ class RemoveUserFromChat(APIView):
         else:
             return Response("Invalid chat or user ID provided.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 '''
 {
     user_id: number;
     newUsername: string;
 }
 '''
+
+
 class ChangeUsername(APIView):
     def post(self, request):
         reqDict = dict(request.data)
@@ -265,6 +272,8 @@ class ChangeUsername(APIView):
         user.username = username
         user.save()
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
+
 class ChangeName(APIView):
     def post(self, request):
         reqDict = dict(request.data)
@@ -278,17 +287,19 @@ class ChangeName(APIView):
         user.save()
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
+
 class ChangePassword(APIView):
     def post(self, request):
         reqDict = dict(request.data)
         uid = reqDict['user_id']
         password = reqDict['newPassword']
         old_password = reqDict['oldPassword']
-        user: UserModel = User.objects.filter(id=uid,password=old_password).first()
+        user: UserModel = User.objects.filter(
+            id=uid, password=old_password).first()
         if user is None:
             return Response(f'User {uid} does not exist in users table. Or password was incorrect', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        user.password = password;
+        user.password = password
         user.save()
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 

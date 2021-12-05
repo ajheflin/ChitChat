@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+os.environ['DJANGO_ALLOW_ASYNC_UNSAFE'] = 'true'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +28,7 @@ SECRET_KEY = 'django-insecure-88mx^$2*dlvx(f%9@j9ay##p6&)x7^70a*2aac3b_#4cw8z4be
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -34,6 +37,7 @@ REST_FRAMEWORK = {
 }
 
 INSTALLED_APPS = [
+    'channels',
     'rest_framework',
     'chitchatapi.apps.ChitchatapiConfig',
     'django.contrib.admin',
@@ -74,6 +78,11 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'api.asgi.application'
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

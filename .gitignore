@@ -1,4 +1,7 @@
 node_modules
 .vscode
 workspace.code-workspace
-__pycache__
+env
+api/api/__pycache__
+api/chitchatapi/__pycache__
+api/chitchatapi/migrations/__pycache__

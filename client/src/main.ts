@@ -5,8 +5,14 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueMeta from "vue-meta";
 import "./index.css";
+import VueNativeSock from "vue-native-websocket";
 Vue.config.productionTip = false;
 
+Vue.use(VueNativeSock as any, "/api/ws/", {
+  connectManually: true,
+  reconnect: true,
+  reconnectionDelay: 1000,
+});
 Vue.use(VueMeta, { keyName: "head" });
 
 new Vue({

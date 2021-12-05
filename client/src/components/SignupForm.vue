@@ -32,7 +32,7 @@
         label="Password"
         required
       ></v-text-field>
-      <div class="w-full">
+      <div class="w-full flex flex-column text-center">
         <v-btn
           :disabled="!valid"
           color="success"
@@ -41,6 +41,10 @@
         >
           Signup</v-btn
         >
+        <p class="mt-3">
+          Already have an account? Login
+          <router-link to="/login" class="text-blue-500">here</router-link>
+        </p>
       </div>
     </v-form>
   </v-container>
@@ -91,7 +95,7 @@ export default class SignupForm extends Vue {
     if (!(this?.$refs?.form as Vue & { validate: () => boolean }).validate())
       return;
     try {
-      const res = await axios.post(`api/register/`, {
+      const res = await axios.post(`/api/register/`, {
         name: this.name,
         username: this.username,
         password: this.password,
