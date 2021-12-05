@@ -11,20 +11,20 @@ import MessageList from "../components/MessageList.vue";
 import { ROUTES } from "../router/routes";
 import { MetaInfo } from "vue-meta";
 import axios from "axios";
-import IUser from "../interfaces/user.interface";
+import IChat from "../interfaces/chat.interface";
 
 @Component<Chat>({
   components: { MessageList },
   metaInfo(): MetaInfo {
-    return { title: `ChitChat - ${ROUTES.CHAT} with ${this.username}` };
-  }, //replace id with chatter username
+    return { title: `ChitChat - ${this.chatName}` };
+  },
   name: ROUTES.CHAT,
 })
 export default class Chat extends Vue {
-  private username = "";
+  private chatName = "";
   async created() {
-    const res = await axios.get(`/api/users/${this.$route.params.id}/`);
-    this.username = (res.data as IUser).username;
+    const res = await axios.get(`/api/chats/${this.$route.params.id}/`);
+    this.chatName = (res.data as IChat).name;
   }
 }
 </script>
